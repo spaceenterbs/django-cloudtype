@@ -35,9 +35,11 @@ THIRD_PARTY_APPS = [
 ]
 
 CUSTOM_APPS = [
+    "common.apps.CommonConfig",
     "community_boards.apps.CommunityBoardsConfig",
     "reviews.apps.ReviewsConfig",
     "reviews_reviews.apps.ReviewsReviewsConfig",
+    "youtube_videos.apps.YoutubeVideosConfig",
 ]
 
 SYSTEM_APPS = [

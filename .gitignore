@@ -56,7 +56,7 @@ cover/
 *.pot
 
 # Django stuff:
-pyproject.toml
+# pyproject.toml
 *.log
 local_settings.py
 db.sqlite3
