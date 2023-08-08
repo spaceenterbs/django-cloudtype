@@ -22,5 +22,9 @@ class Community_Board(CommonModel):
 
     content = models.TextField()
 
+    is_blocked = models.BooleanField(default=False)
+
+    file = models.FileField()
+
     def __str__(self):
         return self.kind

@@ -3,8 +3,5 @@ from .models import Community_Board
 
 
 @admin.register(Community_Board)
-class Review_ReviewAdmin(admin.ModelAdmin):
-
-    """Review_Review Admin Definition"""
-
+class Community_Board(admin.ModelAdmin):
     pass
