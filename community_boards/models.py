@@ -2,29 +2,18 @@ from django.db import models
 from common.models import CommonModel
 
 
-class Community_Board(CommonModel):
+class Board(CommonModel):
+    class CategoryTypeChoices(models.TextChoices):
+        자게 = ("freeboard", "자게")
+        후기 = ("after", "후기")
+        양도 = ("trade", "양도")
 
-    """Community Board model"""
-
-    class CommunityBoardKindChoices(models.TextChoices):
-        FREE_BOARD = "free_board", "Free Board"
-        REVIEW_BOARD = "review_board", "Review Board"
-        TRADE_BOARD = "trade_board", "Trade Board"
-
-    kind = models.CharField(
-        max_length=15,
-        choices=CommunityBoardKindChoices.choices,
+    title = models.CharField(max_length=30, null=False, blank=False)
+    content = models.TextField(null=False, blank=False)
+    is_block = models.BooleanField(default=False)
+    photo = models.URLField(blank=True, null=True)
+    file = models.FileField(upload_to="file", blank=True)
+    author = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="boards"
     )
-
-    nickname = models.CharField(
-        max_length=20,
-    )
-
-    content = models.TextField()
-
-    is_blocked = models.BooleanField(default=False)
-
-    file = models.FileField()
-
-    def __str__(self):
-        return self.kind
+    category = models.CharField(max_length=12, choices=CategoryTypeChoices.choices)
