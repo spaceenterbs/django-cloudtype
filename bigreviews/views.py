@@ -12,8 +12,8 @@ from django.db.models import F
 from datetime import datetime, timedelta
 
 
-class Youtube_Videos(APIView):
-    def get(self, request):
+class Bigreviews(APIView):
+    def get(self, request, pk):
         bigreviews = Bigreview.objects.all()
         serializer = BigreviewSerializer(bigreviews, many=True)
         return Response(serializer.data)
@@ -32,47 +32,32 @@ class Youtube_Videos(APIView):
             return Response({"error": str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-class Youtube_VideoDetail(APIView):
-    def get_object(self, pk):
-        try:
-            return Youtube_Video.objects.get(pk=pk)
-        except Youtube_Video.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
+# class BigreviewDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Bigreview.objects.get(pk=pk)
+#         except Bigreview.DoesNotExist:
+#             return Response(status=HTTP_404_NOT_FOUND)
 
-    def get(self, request, pk):
-        youtube_video = self.get_object(pk)
-        youtube_video = self.get_object(pk)
-        viewed_videos = request.COOKIES.get("viewed_videos", "").split(",")
-        if str(pk) not in viewed_videos:
-            Youtube_Video.objects.filter(pk=pk).update(views_count=F("views_count") + 1)
-            viewed_videos.append(str(pk))
-        serializer = Youtube_VideoSerializer(youtube_video)
-        response = Response(serializer.data)
+#     def get(self, request, pk):
+#         bigreview = self.get_object(pk)
+#         viewed_bigreviews = request.COOKIES.get("viewed_videos", "").split(",")
+#         if str(pk) not in viewed_bigreviews:
+#             Youtube_Video.objects.filter(pk=pk).update(views_count=F("views_count") + 1)
+#             viewed_videos.append(str(pk))
+#         serializer = Youtube_VideoSerializer(youtube_video)
+#         response = Response(serializer.data)
+#         return response
 
-        # 쿠키 설정
-        expires = datetime.strftime(
-            datetime.utcnow() + timedelta(days=30), "%a, %d-%b-%Y %H:%M:%S GMT"
-        )
-        response.set_cookie(
-            "viewed_videos",
-            ",".join(viewed_videos),
-            expires=expires,
-            httponly=True,
-            secure=True,
-            samesite="Lax",
-        )
+#     def put(self, request, pk):
+#         youtube_video = self.get_object(pk)
+#         serializer = Youtube_VideoSerializer(youtube_video, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors)
 
-        return response
-
-    def put(self, request, pk):
-        youtube_video = self.get_object(pk)
-        serializer = Youtube_VideoSerializer(youtube_video, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors)
-
-    def delete(self, request, pk):
-        youtube_video = self.get_object(pk)
-        youtube_video.delete()
-        return Response(status=HTTP_404_NOT_FOUND)
+#     def delete(self, request, pk):
+#         youtube_video = self.get_object(pk)
+#         youtube_video.delete()
+#         return Response(status=HTTP_404_NOT_FOUND)
