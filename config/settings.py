@@ -51,6 +51,7 @@ THIRDPARTY_APPS = [
     "django_apscheduler",
     "xmltodict",
     # "sslserver",
+    "hitcount",
 ]
 
 DEFAULT_APPS = [

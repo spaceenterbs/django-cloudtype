@@ -11,17 +11,20 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
 )
 
-class Reviews(APIView):
 
-    def post(self, request):
-        try:
-            serializer = ReviewSerializer(data=request.data)
-            if serializer.is_valid():
-                content = serializer.save()
-                return Response(ReviewSerializer(content).data=HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-    except Exception as e:
-        return Response({"error": str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
-    
-    # def get(self, request, pk):
+class Reviews(APIView):
+    pass
+
+
+#     def post(self, request):
+#         try:
+#             serializer = ReviewSerializer(data=request.data)
+#             if serializer.is_valid():
+#                 content = serializer.save()
+#             return Response(ReviewSerializer(content).data=HTTP_201_CREATED)
+#         else:
+#             return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+#     except Exception as e:
+#         return Response({"error": str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
+
+#     # def get(self, request, pk):

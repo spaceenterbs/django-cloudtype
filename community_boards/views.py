@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from .models import Board
 from .serializers import BoardSerializer
 from rest_framework.status import (
-    # HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_500_INTERNAL_SERVER_ERROR,

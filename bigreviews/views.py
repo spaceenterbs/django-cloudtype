@@ -1,10 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.response import Response
-from .models import Youtube_Video
-from .serializers import Youtube_VideoSerializer
+from .models import Bigreview
+from .serializers import BigreviewSerializer
 from rest_framework.status import (
-    HTTP_200_OK,
     HTTP_201_CREATED,
     HTTP_400_BAD_REQUEST,
     HTTP_500_INTERNAL_SERVER_ERROR,
@@ -15,17 +14,17 @@ from datetime import datetime, timedelta
 
 class Youtube_Videos(APIView):
     def get(self, request):
-        youtube_videos = Youtube_Video.objects.all()
-        serializer = Youtube_VideoSerializer(youtube_videos, many=True)
+        bigreviews = Bigreview.objects.all()
+        serializer = BigreviewSerializer(bigreviews, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         try:
-            serializer = Youtube_VideoSerializer(data=request.data)
+            serializer = BigreviewSerializer(data=request.data)
             if serializer.is_valid():
                 content = serializer.save()
                 return Response(
-                    Youtube_VideoSerializer(content).data, status=HTTP_201_CREATED
+                    BigreviewSerializer(content).data, status=HTTP_201_CREATED
                 )
             else:
                 return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
