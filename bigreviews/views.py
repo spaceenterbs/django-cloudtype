@@ -39,6 +39,14 @@ class Bigreviews(APIView):
 #         except Bigreview.DoesNotExist:
 #             return Response(status=HTTP_404_NOT_FOUND)
 
+
+# class BigreviewDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             return Bigreview.objects.get(pk=pk)
+#         except Bigreview.DoesNotExist:
+#             return Response(status=HTTP_404_NOT_FOUND)
+
 #     def get(self, request, pk):
 #         bigreview = self.get_object(pk)
 #         viewed_bigreviews = request.COOKIES.get("viewed_videos", "").split(",")
