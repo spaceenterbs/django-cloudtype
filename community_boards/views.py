@@ -13,6 +13,11 @@ from rest_framework.status import (
 
 class Boards(APIView):
     def get(self, request):
+        # category = request.query_params.get("category", None)
+        # if category is not None:
+        #     boards = Board.objects.filter(category=category)
+        # else:
+        #     boards = Board.objects.all()
         boards = Board.objects.all()
         serializer = BoardSerializer(boards, many=True)
         return Response(serializer.data)

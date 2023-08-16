@@ -4,10 +4,12 @@ from common.models import CommonModel
 
 class Bigreview(CommonModel):
     author = models.ForeignKey(
-        "users.User", on_delete=models.CASCADE, related_name="rreviews"
+        "users.User",
+        on_delete=models.CASCADE,
     )
     parent_review = models.ForeignKey(
-        "reviews.Review", on_delete=models.CASCADE, related_name="rreviews"
+        "reviews.Review",
+        on_delete=models.CASCADE,
     )
     content = models.CharField(max_length=140)
 
