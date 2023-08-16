@@ -4,11 +4,11 @@ from .models import Review
 from .serializers import ReviewSerializer
 from rest_framework.status import (
     HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
-from django.db.models import F
 
 
 class Reviews(APIView):
@@ -17,7 +17,6 @@ class Reviews(APIView):
         serializer = ReviewSerializer(
             all_reviews,
             many=True,
-            context={"request": request},
         )
         return Response(serializer.data)
 
@@ -39,17 +38,13 @@ class ReviewDetail(APIView):
             return Review.objects.get(pk=pk)
         except Review.DoesNotExist:
             return Response(status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            raise e
 
     def get(self, request, pk):
-        # 쿠키에서 이미 조회한 비디오의 목록을 가져옴
         review = self.get_object(pk)
-        viewed_review = request.COOKIES.get("viewed_videos", "").split(",")
-        if str(pk) not in viewed_reviews:
-            Review.objects.filter(pk=pk).update(views_count=F("views_count") + 1)
-            viewed_reviews.append(str(pk))
         serializer = ReviewSerializer(review)
-        response = Response(serializer.data)
-        return response
+        return Response(serializer.data)
 
     def put(self, request, pk):
         review = self.get_object(pk)
@@ -62,4 +57,4 @@ class ReviewDetail(APIView):
     def delete(self, request, pk):
         review = self.get_object(pk)
         review.delete()
-        return Response(status=HTTP_404_NOT_FOUND)
+        return Response(status=HTTP_204_NO_CONTENT)

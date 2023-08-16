@@ -1,21 +1,23 @@
 from rest_framework.views import APIView
-from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.response import Response
 from .models import Bigreview
 from .serializers import BigreviewSerializer
 from rest_framework.status import (
     HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
     HTTP_500_INTERNAL_SERVER_ERROR,
 )
-from django.db.models import F
-from datetime import datetime, timedelta
 
 
 class Bigreviews(APIView):
-    def get(self, request, pk):
-        bigreviews = Bigreview.objects.all()
-        serializer = BigreviewSerializer(bigreviews, many=True)
+    def get(self, request):
+        all_bigreviews = Bigreview.objects.all()
+        serializer = BigreviewSerializer(
+            all_bigreviews,
+            many=True,
+        )
         return Response(serializer.data)
 
     def post(self, request):
@@ -32,40 +34,29 @@ class Bigreviews(APIView):
             return Response({"error": str(e)}, status=HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# class BigreviewDetail(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Bigreview.objects.get(pk=pk)
-#         except Bigreview.DoesNotExist:
-#             return Response(status=HTTP_404_NOT_FOUND)
+class BigreviewDetail(APIView):
+    def get_object(self, pk):
+        try:
+            return Bigreview.objects.get(pk=pk)
+        except Bigreview.DoesNotExist:
+            return Response(status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            raise e
 
+    def get(self, request, pk):
+        review = self.get_object(pk)
+        serializer = BigreviewSerializer(review)
+        return Response(serializer.data)
 
-# class BigreviewDetail(APIView):
-#     def get_object(self, pk):
-#         try:
-#             return Bigreview.objects.get(pk=pk)
-#         except Bigreview.DoesNotExist:
-#             return Response(status=HTTP_404_NOT_FOUND)
+    def put(self, request, pk):
+        bigreview = self.get_object(pk)
+        serializer = BigreviewSerializer(bigreview, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
 
-#     def get(self, request, pk):
-#         bigreview = self.get_object(pk)
-#         viewed_bigreviews = request.COOKIES.get("viewed_videos", "").split(",")
-#         if str(pk) not in viewed_bigreviews:
-#             Youtube_Video.objects.filter(pk=pk).update(views_count=F("views_count") + 1)
-#             viewed_videos.append(str(pk))
-#         serializer = Youtube_VideoSerializer(youtube_video)
-#         response = Response(serializer.data)
-#         return response
-
-#     def put(self, request, pk):
-#         youtube_video = self.get_object(pk)
-#         serializer = Youtube_VideoSerializer(youtube_video, data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors)
-
-#     def delete(self, request, pk):
-#         youtube_video = self.get_object(pk)
-#         youtube_video.delete()
-#         return Response(status=HTTP_404_NOT_FOUND)
+    def delete(self, request, pk):
+        bigreview = self.get_object(pk)
+        bigreview.delete()
+        return Response(status=HTTP_204_NO_CONTENT)
